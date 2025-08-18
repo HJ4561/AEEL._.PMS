@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="signup-container">
+    <div class="signup-card">
+        <h1 class="signup-title">Create Account</h1>
+        <p class="signup-subtitle">Join us today! It's quick and easy.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-at"></i></span>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-users-cog"></i></span>
+                <select name="account_type" required>
+                    <option value="manager">Manager</option>
+                    <option value="engineer">Engineer</option>
+                </select>
+            </div>
+
+            <!-- Password field with toggle -->
+            <div class="input-group password-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <span class="toggle-password" onclick="togglePassword('password', this)">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
+
+            <!-- Confirm password field with toggle -->
+            <div class="input-group password-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+                <span class="toggle-password" onclick="togglePassword('confirm_password', this)">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-user-check"></i> Create Account
+            </button>
+        </form>
+
+        <p class="login-link">Already have an account? <a href="/login/">Login here</a></p>
+    </div>
+</div>
+
+<script>
+function togglePassword(fieldId, element) {
+    const passwordField = document.getElementById(fieldId);
+    const icon = element.querySelector("i");
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+</script>
+{% endblock %}

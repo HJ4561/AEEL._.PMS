@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid py-5 animate__animated animate__fadeIn">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo me-3">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12 7C9.24 7 7 9.24 7 12C7 14.76 9.24 17 12 17C14.76 17 17 14.76 17 12C17 9.24 14.76 7 12 7ZM12 15C10.34 15 9 13.66 9 12C9 10.34 10.34 9 12 9C13.66 9 15 10.34 15 12C15 13.66 13.66 15 12 15Z" fill="#a855f7"/>
+                    </svg>
+                </div>
+                <h1 class="display-4 fw-bold mb-4 text-gradient">Engineer Dashboard</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card glass-effect p-4 shadow-glow text-center animate__animated animate__fadeIn">
+                <div class="icon-circle bg-primary text-white mb-3 mx-auto">
+                    <i class="fas fa-user fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">My Profile</h5>
+                <p class="text-muted">View and edit your personal information</p>
+                <a href="#" class="btn btn-primary">View Profile</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card glass-effect p-4 shadow-glow text-center animate__animated animate__fadeIn" style="animation-delay: 0.2s;">
+                <div class="icon-circle bg-success text-white mb-3 mx-auto">
+                    <i class="fas fa-tasks fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">My Tasks</h5>
+                <p class="text-muted">View assigned tasks and projects</p>
+                <a href="#" class="btn btn-success">View Tasks</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card glass-effect p-4 shadow-glow text-center animate__animated animate__fadeIn" style="animation-delay: 0.4s;">
+                <div class="icon-circle bg-info text-white mb-3 mx-auto">
+                    <i class="fas fa-chart-line fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">My Progress</h5>
+                <p class="text-muted">Track your performance and achievements</p>
+                <a href="#" class="btn btn-info">View Progress</a>
+            </div>
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="card glass-effect p-4 shadow-glow animate__animated animate__fadeInRight">
+                <h3 class="h5 fw-bold mb-4 text-primary"><i class="fas fa-bell me-2"></i>Recent Notifications</h3>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent">You have no notifications at this time.</li>
+                    <li class="list-group-item bg-transparent"><i class="fas fa-check text-success me-2"></i>Task completed successfully <small class="text-muted">1 hour ago</small></li>
+                    <li class="list-group-item bg-transparent"><i class="fas fa-envelope text-info me-2"></i>New message received <small class="text-muted">3 hours ago</small></li>
+                    <li class="list-group-item bg-transparent"><i class="fas fa-calendar text-warning me-2"></i>Meeting reminder <small class="text-muted">1 day ago</small></li>
+                </ul>
+            </div>
+            <div class="card glass-effect p-4 shadow-glow mt-4 animate__animated animate__fadeInRight">
+                <h3 class="h5 fw-bold mb-4 text-primary"><i class="fas fa-chart-pie me-2"></i>Task Status Overview</h3>
+                <canvas id="taskChart" height="30"></canvas>
+            </div>
+            <div class="card glass-effect p-4 shadow-glow mt-4 animate__animated animate__fadeInRight">
+                <h3 class="h5 fw-bold mb-4 text-primary"><i class="fas fa-tasks me-2"></i>My Tasks</h3>
+                <input type="text" class="form-control mb-3" placeholder="Search tasks..." aria-label="Search tasks">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                            <tr class="interactive">
+                                <td>{{ task.title }}</td>
+                                <td>
+                                    <span class="badge bg-{% if task.status == 'done' %}success{% elif task.status == 'inprogress' %}warning{% else %}danger{% endif %} rounded-pill">
+                                        {{ task.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-success"><i class="fas fa-check"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card glass-effect p-4 shadow-glow animate__animated animate__fadeInLeft h-30">
+                <h3 class="h5 fw-bold mb-4 text-primary"><i class="fas fa-bolt me-2"></i>Quick Actions</h3>
+                <a href="#" class="btn btn-outline-primary w-100 mb-3"><i class="fas fa-plus me-2"></i>New Request</a>
+                <a href="#" class="btn btn-outline-primary w-100 mb-3"><i class="fas fa-download me-2"></i>Download Files</a>
+                <a href="#" class="btn btn-outline-primary w-100"><i class="fas fa-question-circle me-2"></i>Get Help</a>
+            </div>
+            <div class="card glass-effect p-4 mt-4 shadow-glow animate__animated animate__fadeInLeft h-30">
+                <h3 class="h5 fw-bold mb-4 text-primary"><i class="fas fa-user-circle me-2"></i>Account Info</h3>
+                <p class="mb-2">Username: {{ user.email }}</p>
+                <p class="mb-2">Role: Engineer</p>
+                <p class="mb-0">Member since: August 2025</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('taskChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['To Do', 'In Progress', 'Done'],
+                datasets: [{
+                    data: [{{ status_counts.todo }}, {{ status_counts.inprogress }}, {{ status_counts.done }}],
+                    backgroundColor: ['#ef4444', '#facc15', '#22c55e'],
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#1f2937', font: { size: 14 } }
+                    }
+                }
+            }
+        });
+    </script>
+</div>
+{% endblock %}
