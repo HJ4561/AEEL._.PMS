@@ -23,11 +23,14 @@
                 AEEL-PMS
             </a>
             {% if user.is_authenticated %}
-                <div class="ms-auto d-flex align-items-center">
-                    <span class="navbar-text me-3">Welcome, {{ user.email }} ({{ user.role|capfirst }})</span>
-                    <a href="/logout/" class="btn btn-outline-light"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
-                </div>
-            {% endif %}
+    <div class="ms-auto d-flex align-items-center">
+        <span class="navbar-text me-3">Welcome, {{ user.email }} ({{ user.role|capfirst }})</span>
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-light"><i class="fas fa-sign-out-alt me-1"></i>Logout</button>
+        </form>
+    </div>
+{% endif %}
         </div>
     </nav>
     <div class="container mt-4">

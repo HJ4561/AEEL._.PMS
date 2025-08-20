@@ -8,10 +8,10 @@
         <form method="post">
             {% csrf_token %}
 
-            <!-- Username / Email -->
+            <!-- Email -->
             <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                <input type="text" name="username" placeholder="Username or Email" required>
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" name="username" placeholder="Email Address" required>
             </div>
 
             <!-- Password with toggle -->
@@ -25,7 +25,7 @@
 
             <!-- Submit Button -->
             <button type="submit" class="btn-submit">
-                <i class="fas fa-arrow-right"></i> Sign In
+                <i class="fas fa-sign-in-alt"></i> Sign In
             </button>
         </form>
 

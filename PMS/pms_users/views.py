@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView
 from .forms import SignupForm, LoginForm
 from .models import CustomUser
-from tasks.models import Task  # Corrected import
+from tasks.models import Task
 
 class SignupView(CreateView):
     form_class = SignupForm
@@ -12,10 +12,19 @@ class SignupView(CreateView):
     success_url = '/dashboard/'
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        user = authenticate(email=form.cleaned_data['email'], password=form.cleaned_data['password1'])
-        login(self.request, user)
-        return response
+        user = form.save()
+        authenticated_user = authenticate(self.request, email=user.email, password=form.cleaned_data['password1'])
+        if authenticated_user is not None:
+            login(self.request, authenticated_user)
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        user = self.request.user
+        if user.role == 'manager':
+            return '/manager_dashboard/'
+        elif user.role == 'engineer':
+            return '/engineer_dashboard/'
+        return '/dashboard/'
 
 class CustomLoginView(LoginView):
     form_class = LoginForm
