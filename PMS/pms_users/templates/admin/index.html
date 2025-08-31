@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<div class="module">
+    <h2>User Role Summary</h2>
+    <table>
+        <tr>
+            <th>Role</th>
+            <th>Count</th>
+        </tr>
+        <tr>
+            <td>Managers</td>
+            <td>{{ manager_count }}</td>
+        </tr>
+        <tr>
+            <td>Engineers</td>
+            <td>{{ engineer_count }}</td>
+        </tr>
+        <tr>
+            <td>Admins</td>
+            <td>{{ admin_count }}</td>
+        </tr>
+    </table>
+</div>
+{{ block.super }}
+{% endblock %}

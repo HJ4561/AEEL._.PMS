@@ -18,9 +18,9 @@
         <div class="col-md-4">
             <div class="card glass-effect p-4 shadow-glow animate__animated animate__fadeInLeft h-30">
                 <h3 class="h5 fw-bold mb-4 text-primary"><i class="fas fa-bolt me-2"></i>Quick Actions</h3>
-                <button class="btn btn-primary w-100 mb-3" data-bs-toggle="modal" data-bs-target="#createTaskModal">
-                    <i class="fas fa-plus me-2"></i>Create Task
-                </button>
+                <a href="{% url 'create_project' %}" class="btn btn-primary w-100 mb-3">
+                    <i class="fas fa-plus me-2"></i>Create Project
+                </a>
                 <a href="/reports/" class="btn btn-outline-primary w-100 mb-3">
                     <i class="fas fa-chart-bar me-2"></i>View Reports
                 </a>
@@ -110,24 +110,224 @@
         </div>
     </div>
 
-    <!-- Task Creation Modal -->
-    <div class="modal fade" id="createTaskModal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-effect">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title text-primary" id="createTaskModalLabel"><i class="fas fa-plus me-2"></i>Create New Task</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-success w-100"><i class="fas fa-save me-2"></i>Save Task</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <style>
+        :root {
+            --primary: #6d28d9;
+            --primary-light: #a855f7;
+            --primary-dark: #4c1d95;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-card: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.8);
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-muted: #6b7280;
+            --text-gray: #9ca3af;
+            --border: rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 20px rgba(167, 139, 250, 0.2);
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .card.glass-effect {
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow), 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);
+            color: #ffffff;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #4ade80 0%, var(--success) 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #b91c1c 100%);
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #f87171 0%, var(--danger) 100%);
+            transform: translateY(-2px);
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo {
+            margin-right: 1rem;
+        }
+
+        .shadow-glow {
+            box-shadow: var(--shadow-glow);
+        }
+
+        .interactive:hover {
+            transform: scale(1.02);
+        }
+
+        .table {
+            background: transparent;
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+        }
+
+        .table th {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table tbody tr:hover {
+            background: rgba(167, 139, 250, 0.1);
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .bg-primary {
+            background-color: var(--primary) !important;
+        }
+
+        .bg-success {
+            background-color: var(--success) !important;
+        }
+
+        .bg-warning {
+            background-color: var(--warning) !important;
+        }
+
+        .bg-danger {
+            background-color: var(--danger) !important;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-primary);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-gray);
+        }
+
+        .list-group-item {
+            background: transparent;
+            border: none;
+            padding: 0.75rem 0;
+            color: var(--text-primary);
+        }
+
+        .text-success {
+            color: var(--success);
+        }
+
+        .text-info {
+            color: #06b6d4;
+        }
+
+        .text-warning {
+            color: var(--warning);
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 1.25rem;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+            }
+
+            .row > .col-md-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
     
     <script>
         const ctx = document.getElementById('taskChart').getContext('2d');

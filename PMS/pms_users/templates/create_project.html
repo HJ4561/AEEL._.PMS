@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="signup-container">
+    <div class="signup-card">
+        <h1 class="signup-title"><i class="fas fa-project-diagram me-2"></i> Create Project</h1>
+        <p class="signup-subtitle">Fill in the details to create a new project</p>
+
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Title -->
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                <input type="text" name="title" placeholder="Project Title" required>
+            </div>
+            
+            <!-- Description -->
+            <div class="input-group description-group">
+                <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                <textarea name="description" placeholder="Project Description"></textarea>
+            </div>
+            
+            <!-- Start Date -->
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                <input type="date" name="start_date" required>
+            </div>
+            
+            <!-- End Date -->
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-calendar-check"></i></span>
+                <input type="date" name="end_date" required>
+            </div>
+            
+            <!-- Assigned Engineers -->
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-users"></i></span>
+                <select name="assigned_engineers" multiple required>
+                    <option value="" disabled>Select Engineers</option>
+                    {% for engineer in form.assigned_engineers.queryset %}
+                        <option value="{{ engineer.id }}">{{ engineer.email }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-save"></i> Create Project
+            </button>
+        </form>
+        <p class="login-link"><a href="{% url 'manager_dashboard' %}">Back to Dashboard</a></p>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary: #6d28d9;
+        --border: rgba(0, 0, 0, 0.1);
+        --radius-md: 0.75rem;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --field-height: 40px; /* Height for most fields */
+        --description-height: 80px; /* Taller height for description */
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 50px;
+    }
+
+    .signup-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+    }
+
+    .signup-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 600px;
+        max-width: 90%;
+    }
+
+    h1 {
+        text-align: center; /* Centers the "Create Project" title */
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        height: var(--field-height);
+    }
+
+    .description-group {
+        height: var(--description-height); /* Taller height for description */
+        align-items: flex-start; /* Align textarea content to top */
+    }
+
+    .input-group-text {
+        background: transparent;
+        padding: 0.75rem;
+        color: #666;
+        font-size: 1rem;
+        border: none;
+        height: 100%; /* Match parent height */
+        display: flex;
+        align-items: center;
+    }
+
+    .input-group input,
+    .input-group select {
+        border: none;
+        padding: 0.75rem;
+        flex: 1;
+        font-size: 0.95rem;
+        outline: none;
+        background: transparent;
+        height: var(--field-height);
+        line-height: var(--field-height);
+    }
+
+    .input-group textarea {
+        border: none;
+        padding: 0.75rem;
+        flex: 1;
+        font-size: 0.95rem;
+        outline: none;
+        background: transparent;
+        height: var(--description-height);
+        resize: none;
+    }
+
+    .input-group select[multiple] {
+        height: var(--field-height);
+        overflow-y: auto;
+    }
+
+    .input-group select[multiple] option:checked {
+        background: #6d28d9; /* Highlight selected options */
+        color: white;
+    }
+
+    .btn-submit {
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        width: 100%;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-submit:hover {
+        opacity: 0.9;
+    }
+
+    .login-link {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+    }
+
+    .login-link a {
+        color: #2575fc;
+        text-decoration: none;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .signup-card {
+            width: 90%;
+        }
+    }
+</style>
+{% endblock %}

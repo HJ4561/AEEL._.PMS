@@ -5,13 +5,26 @@
         <h1 class="signup-title"><i class="fas fa-sign-in-alt me-2"></i> Welcome Back!</h1>
         <p class="signup-subtitle">Please log in to your account</p>
 
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <form method="post">
             {% csrf_token %}
 
-            <!-- Username / Email -->
+            <!-- Email -->
             <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                <input type="text" name="username" placeholder="Username or Email" required>
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" name="username" placeholder="Email" required>
             </div>
 
             <!-- Password with toggle -->
@@ -32,6 +45,119 @@
         <p class="login-link">Don't have an account? <a href="/signup/">Sign up here</a></p>
     </div>
 </div>
+
+<style>
+    :root {
+        --primary: #6d28d9;
+        --border: rgba(0, 0, 0, 0.1);
+        --radius-md: 0.75rem;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+
+    .signup-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .signup-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .input-group-text {
+        background: transparent;
+        padding: 0.75rem;
+        color: #666;
+        font-size: 1rem;
+        border: none;
+    }
+
+    .password-group {
+        position: relative;
+    }
+
+    .toggle-password {
+        padding: 0.75rem;
+        color: #666;
+        cursor: pointer;
+        background: transparent;
+        border-left: 1px solid #ddd;
+    }
+
+    .toggle-password:hover {
+        color: #2575fc;
+    }
+
+    .input-group input {
+        border: none;
+        padding: 0.75rem;
+        flex: 1;
+        font-size: 0.95rem;
+        outline: none;
+        background: transparent;
+    }
+
+    .btn-submit {
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        width: 100%;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-submit:hover {
+        opacity: 0.9;
+    }
+
+    .login-link {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+    }
+
+    .login-link a {
+        color: #2575fc;
+        text-decoration: none;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+    }
+</style>
 
 <script>
 function togglePassword() {

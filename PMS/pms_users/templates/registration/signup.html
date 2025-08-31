@@ -5,19 +5,68 @@
         <h1 class="signup-title"><i class="fas fa-user-plus me-2"></i> Create Account</h1>
         <p class="signup-subtitle">Please sign up for a new account</p>
 
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <form method="post">
             {% csrf_token %}
+            
+            <!-- First Name -->
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                <input type="text" name="username" placeholder="Username or Email" required>
+                <input type="text" name="first_name" placeholder="First Name" required>
             </div>
+            
+            <!-- Last Name -->
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" name="last_name" placeholder="Last Name" required>
+            </div>
+            
+            <!-- Email -->
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            
+            <!-- Role -->
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                <select name="role" required>
+                    <option value="" disabled selected>Select Role</option>
+                    <option value="manager">Manager</option>
+                    <option value="engineer">Engineer</option>
+                </select>
+            </div>
+            
+            <!-- Password -->
             <div class="input-group password-group">
                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                <input type="password" name="password" id="password" placeholder="Password" required>
-                <span class="toggle-password" onclick="togglePassword()">
+                <input type="password" name="password1" id="password1" placeholder="Password" required>
+                <span class="toggle-password" onclick="togglePassword('password1')">
                     <i class="fas fa-eye"></i>
                 </span>
             </div>
+            
+            <!-- Confirm Password -->
+            <div class="input-group password-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" name="password2" id="password2" placeholder="Confirm Password" required>
+                <span class="toggle-password" onclick="togglePassword('password2')">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
+            
             <button type="submit" class="btn-submit">
                 <i class="fas fa-user-plus"></i> Sign Up
             </button>
@@ -25,4 +74,138 @@
         <p class="login-link">Already have an account? <a href="/login/">Log in here</a></p>
     </div>
 </div>
+
+<style>
+    :root {
+        --primary: #6d28d9;
+        --border: rgba(0, 0, 0, 0.1);
+        --radius-md: 0.75rem;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+
+    .signup-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .signup-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .input-group-text {
+        background: transparent;
+        padding: 0.75rem;
+        color: #666;
+        font-size: 1rem;
+        border: none;
+    }
+
+    .password-group {
+        position: relative;
+    }
+
+    .toggle-password {
+        padding: 0.75rem;
+        color: #666;
+        cursor: pointer;
+        background: transparent;
+        border-left: 1px solid #ddd;
+    }
+
+    .toggle-password:hover {
+        color: #2575fc;
+    }
+
+    .input-group input,
+    .input-group select {
+        border: none;
+        padding: 0.75rem;
+        flex: 1;
+        font-size: 0.95rem;
+        outline: none;
+        background: transparent;
+    }
+
+    .input-group select {
+        appearance: none;
+    }
+
+    .btn-submit {
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        width: 100%;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-submit:hover {
+        opacity: 0.9;
+    }
+
+    .login-link {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+    }
+
+    .login-link a {
+        color: #2575fc;
+        text-decoration: none;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<script>
+function togglePassword(id) {
+    const passwordField = document.getElementById(id);
+    const icon = passwordField.nextElementSibling.querySelector("i");
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+</script>
 {% endblock %}
